@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Descubre alimentos, accesorios y productos para tus mascotas en Mokka Pets."
+    />
+    <title>Mokka Pets | Todo lo bueno para ellos</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script type="module" src="/js/pages/home.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/index.html" aria-label="Mokka Pets, inicio">
+        <span class="brand-icon" aria-hidden="true">✿</span>
+        <span>Mokka <span class="brand-light">Pets</span></span>
+      </a>
+
+      <nav class="main-nav" aria-label="Navegación principal">
+        <a class="nav-link active" href="/index.html">Inicio</a>
+        <a class="nav-link" href="#categorias">Categorías</a>
+        <a class="nav-link" href="#destacados">Productos</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="account-link" href="/login.html">Mi cuenta</a>
+        <a class="cart-link" href="/login.html" aria-label="Ver carrito">
+          Carrito <span class="cart-count" id="cart-count">0</span>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">UN POQUITO MÁS DE AMOR, CADA DÍA</p>
+          <h1>Todo lo bueno para quienes <span>más quieres.</span></h1>
+          <p class="hero-description">
+            Alimentos, accesorios y pequeños detalles para cuidar a tus
+            compañeros de aventuras.
+          </p>
+          <a class="button button-primary" href="#destacados">
+            Explorar productos <span aria-hidden="true">→</span>
+          </a>
+          <p class="hero-note">Hecho para sus patitas. Pensado para ti.</p>
+        </div>
+
+        <div class="hero-visual">
+          <img
+            src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?auto=format&fit=crop&w=1100&q=85"
+            alt="Perro y gato disfrutando juntos"
+            fetchpriority="high"
+          />
+          <div class="floating-note">
+            <span aria-hidden="true">♡</span>
+            Pequeños detalles, grandes momentos.
+          </div>
+        </div>
+      </section>
+
+      <section class="categories section-container" id="categorias">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">PARA CADA PERSONALIDAD</p>
+            <h2>Sus favoritos, por categoría</h2>
+          </div>
+          <a class="text-link" href="#destacados">Ver productos →</a>
+        </div>
+
+        <div class="category-grid">
+          <a class="category-card" href="#destacados" data-category="alimentos">
+            <span class="category-icon" aria-hidden="true">♧</span>
+            <span>Alimentos</span>
+          </a>
+          <a
+            class="category-card"
+            href="#destacados"
+            data-category="accesorios"
+          >
+            <span class="category-icon" aria-hidden="true">♡</span>
+            <span>Accesorios</span>
+          </a>
+          <a class="category-card" href="#destacados" data-category="higiene">
+            <span class="category-icon" aria-hidden="true">✧</span>
+            <span>Higiene</span>
+          </a>
+          <a class="category-card" href="#destacados" data-category="camas">
+            <span class="category-icon" aria-hidden="true">⌂</span>
+            <span>Camas y descanso</span>
+          </a>
+          <a class="category-card" href="#destacados" data-category="juguetes">
+            <span class="category-icon" aria-hidden="true">◎</span>
+            <span>Juguetes</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="featured section-container" id="destacados">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">ELEGIDOS CON CARIÑO</p>
+            <h2>Productos destacados</h2>
+            <p class="section-description">
+              Encuentra algo especial para tu mejor amigo.
+            </p>
+          </div>
+        </div>
+
+        <div
+          id="products-message"
+          class="status-message"
+          role="status"
+          aria-live="polite"
+        >
+          Cargando productos...
+        </div>
+
+        <div class="product-grid" id="product-grid"></div>
+      </section>
+
+      <section class="promise">
+        <div>
+          <span aria-hidden="true">♡</span>
+          <h3>Elegidos con cariño</h3>
+          <p>Productos para acompañarlos todos los días.</p>
+        </div>
+        <div>
+          <span aria-hidden="true">✿</span>
+          <h3>Una compra sencilla</h3>
+          <p>Encuentra lo que necesitan sin complicaciones.</p>
+        </div>
+        <div>
+          <span aria-hidden="true">⌂</span>
+          <h3>Su bienestar importa</h3>
+          <p>Cada detalle cuenta para quienes más quieres.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand" href="/index.html"
+        >Mokka <span class="brand-light">Pets</span></a
+      >
+      <p>Un hogar más feliz empieza con ellos. ♡</p>
+      <small>© 2026 Mokka Pets</small>
+    </footer>
+  </body>
+</html>
