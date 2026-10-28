@@ -1,4 +1,5 @@
 import { getProducts } from "../api/products-api.js";
+import { updateCartHeader } from "../services/cart-header.js";
 
 const productGrid = document.querySelector("#product-grid");
 const productsMessage = document.querySelector("#products-message");
@@ -168,4 +169,5 @@ async function loadProducts() {
   }
 }
 
+updateCartHeader();
 loadProducts();

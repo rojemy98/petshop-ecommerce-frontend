@@ -1,5 +1,6 @@
 import { getProductById } from "../api/products-api.js";
 import { addToCart, getCartItemQuantity } from "../services/cart-service.js";
+import { updateCartHeader } from "../services/cart-header.js";
 
 const message = document.querySelector("#detail-message");
 const detail = document.querySelector("#product-detail");
@@ -139,6 +140,8 @@ addButton.addEventListener("click", () => {
 
     // Agregar el producto al carrito.
     addToCart(currentProduct, quantity);
+
+    updateCartHeader();
 
     // Calcular el stock restante después de agregarlo.
     const remainingStock = Math.max(0, availableStock - quantity);

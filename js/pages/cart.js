@@ -7,6 +7,8 @@ import {
   getCartTotal,
 } from "../services/cart-service.js";
 
+import { updateCartHeader } from "../services/cart-header.js";
+
 const cartItems = document.querySelector("#cart-items");
 const cartMessage = document.querySelector("#cart-message");
 const cartTotal = document.querySelector("#cart-total");
@@ -20,70 +22,83 @@ function formatPrice(value) {
   }).format(value);
 }
 
+function showMessage(text, type = "") {
+  cartMessage.textContent = text;
+  cartMessage.className = type;
+}
+
 function renderCart() {
   const items = getCart();
+
   cartItems.replaceChildren();
 
-  if (items.length === 0) {
-    cartMessage.textContent = "Tu carrito está vacío.";
+  const isEmpty = items.length === 0;
+
+  clearButton.disabled = isEmpty;
+  checkoutButton.disabled = isEmpty;
+
+  if (isEmpty) {
+    showMessage("Tu carrito está vacío.");
     cartTotal.textContent = formatPrice(0);
-    clearButton.disabled = true;
-    checkoutButton.disabled = true;
     return;
   }
 
-  cartMessage.textContent = `${getCartCount()} artículo(s) en tu carrito.`;
-  clearButton.disabled = false;
-  checkoutButton.disabled = false;
+  showMessage(`${getCartCount()} unidad(es) en tu carrito.`);
 
   items.forEach((item) => {
     const article = document.createElement("article");
     article.className = "cart-item";
 
     const details = document.createElement("div");
+    details.className = "cart-item-details";
 
     const name = document.createElement("h2");
     name.textContent = item.name;
 
     const price = document.createElement("p");
-    price.textContent = formatPrice(item.price);
+    price.textContent = `Precio: ${formatPrice(item.price)}`;
 
     const quantityLabel = document.createElement("label");
     quantityLabel.textContent = "Cantidad ";
 
-    const quantity = document.createElement("input");
-    quantity.type = "number";
-    quantity.min = "1";
-    quantity.max = String(item.stock);
-    quantity.step = "1";
-    quantity.value = String(item.quantity);
+    const quantityInput = document.createElement("input");
+    quantityInput.type = "number";
+    quantityInput.min = "1";
+    quantityInput.max = String(item.stock);
+    quantityInput.step = "1";
+    quantityInput.value = String(item.quantity);
+    quantityInput.setAttribute("aria-label", `Cantidad de ${item.name}`);
 
-    quantityLabel.append(quantity);
+    quantityLabel.append(quantityInput);
 
     const subtotal = document.createElement("p");
+    subtotal.className = "cart-item-subtotal";
     subtotal.textContent = `Subtotal: ${formatPrice(item.price * item.quantity)}`;
 
     const removeButton = document.createElement("button");
     removeButton.type = "button";
+    removeButton.className = "remove-item-button";
     removeButton.textContent = "Eliminar";
 
-    quantity.addEventListener("change", () => {
+    quantityInput.addEventListener("change", () => {
       try {
-        updateCartQuantity(item.id, quantity.value);
-        cartMessage.textContent = "";
+        updateCartQuantity(item.id, quantityInput.value);
+        showMessage("");
         renderCart();
       } catch (error) {
-        cartMessage.textContent = error.message;
-        quantity.value = String(item.quantity);
+        showMessage(error.message, "error-message");
+        quantityInput.value = String(item.quantity);
       }
     });
 
     removeButton.addEventListener("click", () => {
       removeFromCart(item.id);
+      showMessage("Producto eliminado del carrito.", "success-message");
       renderCart();
     });
 
     details.append(name, price, quantityLabel, subtotal, removeButton);
+
     article.append(details);
     cartItems.append(article);
   });
@@ -94,11 +109,12 @@ function renderCart() {
 clearButton.addEventListener("click", () => {
   clearCart();
   renderCart();
+  showMessage("Has vaciado el carrito.");
 });
 
 checkoutButton.addEventListener("click", () => {
-  cartMessage.textContent =
-    "El proceso de compra se conectará con el backend en el siguiente paso.";
+  showMessage("El checkout se conectará con el backend en el siguiente paso.");
 });
 
 renderCart();
+updateCartHeader();
