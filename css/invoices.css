@@ -163,3 +163,38 @@
         flex-direction: column;
     }
 }
+
+
+/* Separación entre las tarjetas y el detalle de la factura */
+
+.invoices-list {
+    margin-bottom: 36px;
+}
+
+.invoice-detail {
+    margin-top: 36px;
+    scroll-margin-top: 24px;
+    animation: invoice-appear 0.3s ease-out;
+}
+
+.invoice-detail[hidden] {
+    display: none !important;
+}
+
+@keyframes invoice-appear {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .invoice-detail {
+        animation: none;
+    }
+}

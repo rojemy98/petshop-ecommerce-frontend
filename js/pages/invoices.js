@@ -189,9 +189,19 @@ async function openInvoice(invoiceNumber) {
     const invoice = await getInvoiceByNumber(invoiceNumber);
 
     renderInvoiceDetail(invoice);
+
     invoicesList.hidden = true;
     invoiceDetail.hidden = false;
+
     showMessage("");
+
+    // Esperar a que el navegador actualice la vista antes de desplazarse.
+    requestAnimationFrame(() => {
+      invoiceDetail.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
   } catch (error) {
     showMessage(getErrorMessage(error), "error-message");
   }
@@ -200,7 +210,15 @@ async function openInvoice(invoiceNumber) {
 backButton.addEventListener("click", () => {
   invoiceDetail.hidden = true;
   invoicesList.hidden = false;
+
+  invoiceDetailContent.replaceChildren();
   showMessage("");
+
+  // Regresar al inicio de la página de facturas.
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
 });
 
 async function init() {
