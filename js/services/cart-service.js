@@ -104,3 +104,11 @@ export function getCartTotal() {
     0,
   );
 }
+
+export function getCartItemQuantity(productId) {
+  const cart = readCart();
+
+  const item = cart.find((product) => String(product.id) === String(productId));
+
+  return item ? Number(item.quantity) : 0;
+}
