@@ -106,6 +106,39 @@
 
         <button type="button" id="confirm-checkout">Confirmar compra</button>
       </section>
+
+      <section id="purchase-confirmation" class="purchase-confirmation" hidden>
+        <div class="confirmation-icon" aria-hidden="true">✓</div>
+
+        <p class="confirmation-eyebrow">MOKKA PETS</p>
+        <h2>¡Gracias por tu compra!</h2>
+        <p class="confirmation-description">
+          Tu pedido se ha procesado correctamente.
+        </p>
+
+        <div class="confirmation-details">
+          <p>Número de factura</p>
+          <strong id="confirmation-invoice"></strong>
+
+          <p>Total confirmado</p>
+          <strong id="confirmation-total"></strong>
+        </div>
+
+        <p class="confirmation-note">
+          Pago registrado en modo de demostración. No se realizó ningún cobro
+          real.
+        </p>
+
+        <div class="confirmation-actions">
+          <a href="/invoices.html" class="confirmation-primary">
+            Consultar mis facturas
+          </a>
+
+          <a href="/index.html" class="confirmation-secondary">
+            Seguir comprando
+          </a>
+        </div>
+      </section>
     </main>
   </body>
 </html>

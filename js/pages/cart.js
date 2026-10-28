@@ -36,6 +36,10 @@ const showAddressFormButton = document.querySelector("#show-address-form");
 const cancelAddressFormButton = document.querySelector("#cancel-address-form");
 const confirmCheckoutButton = document.querySelector("#confirm-checkout");
 
+const purchaseConfirmation = document.querySelector("#purchase-confirmation");
+const confirmationInvoice = document.querySelector("#confirmation-invoice");
+const confirmationTotal = document.querySelector("#confirmation-total");
+
 let billingAddresses = [];
 let currentBackendCart = null;
 let checkoutInProgress = false;
@@ -399,7 +403,7 @@ confirmCheckoutButton.addEventListener("click", async () => {
   checkoutButton.disabled = true;
 
   try {
-    // Evita confirmar con cantidades distintas a las del carrito local.
+    // Sincronizar el carrito antes de confirmar la compra.
     const backendCart = await synchronizeCart();
 
     const result = await checkoutCart(backendCart.id, {
@@ -408,42 +412,37 @@ confirmCheckoutButton.addEventListener("click", async () => {
       payment_reference: `DEMO-${Date.now()}`,
     });
 
+    // Limpiar el carrito local después de confirmar el checkout.
     clearCart();
     currentBackendCart = null;
 
     renderCart();
     updateCartHeader();
 
-    checkoutSection.hidden = false;
+    // Mostrar la pantalla de confirmación.
+    confirmationInvoice.textContent = result.invoice_number;
+    confirmationTotal.textContent = formatPrice(result.total);
+    purchaseConfirmation.hidden = false;
 
-    const checkoutTitle = checkoutSection.querySelector("h2");
+    // Ocultar el contenido anterior del carrito.
+    cartItems.hidden = true;
 
-    if (checkoutTitle) {
-      checkoutTitle.textContent = "¡Compra finalizada!";
+    const cartSummary = document.querySelector(".cart-summary");
+
+    if (cartSummary) {
+      cartSummary.hidden = true;
     }
 
-    const checkoutDescription = checkoutSection.querySelector(":scope > p");
+    // Ocultar el formulario de checkout.
+    checkoutSection.hidden = true;
 
-    if (checkoutDescription) {
-      checkoutDescription.hidden = true;
-    }
-
-    // Ocultar completamente la sección de dirección de facturación.
-    const billingAddressGroup = billingAddressSelect.closest(".form-group");
-
-    if (billingAddressGroup) {
-      billingAddressGroup.style.display = "none";
-    }
-    addressForm.hidden = true;
-    showAddressFormButton.hidden = true;
-    confirmCheckoutButton.hidden = true;
-
-    showCheckoutMessage(
-      `¡Compra completada! Factura: ${result.invoice_number}. Total confirmado: ${formatPrice(result.total)}. El pago se registró en modo de demostración.`,
-      "success-message",
-    );
-
+    // Mostrar mensaje general de éxito.
     showMessage("Tu compra se completó correctamente.", "success-message");
+
+    purchaseConfirmation.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   } catch (error) {
     showCheckoutMessage(
       `No se pudo completar la compra: ${getErrorMessage(error)}`,
@@ -460,8 +459,10 @@ clearButton.addEventListener("click", () => {
   clearCart();
   currentBackendCart = null;
   checkoutSection.hidden = true;
+
   renderCart();
   updateCartHeader();
+
   showMessage("Has vaciado el carrito.");
 });
 

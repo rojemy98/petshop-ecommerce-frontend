@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Consulta tus facturas y compras en Mokka Pets."
+    />
+    <title>Mis facturas | Mokka Pets</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/invoices.css" />
+  </head>
+  <body>
+    <main class="invoices-page">
+      <a class="back-link" href="/index.html"> ← Volver a la tienda </a>
+
+      <header class="invoices-header">
+        <p class="eyebrow">MOKKA PETS</p>
+        <h1>Mis facturas</h1>
+        <p>Consulta el historial de tus compras.</p>
+      </header>
+
+      <p id="invoices-message" role="status" aria-live="polite">
+        Cargando tus facturas...
+      </p>
+
+      <section id="invoices-list" class="invoices-list"></section>
+
+      <section id="invoice-detail" class="invoice-detail" hidden>
+        <button id="back-to-invoices" type="button" class="secondary-button">
+          ← Volver a mis facturas
+        </button>
+
+        <div id="invoice-detail-content"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/js/pages/invoices.js"></script>
+  </body>
+</html>
