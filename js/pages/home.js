@@ -1,4 +1,3 @@
-
 import { getProducts } from "../api/products-api.js";
 
 const productGrid = document.querySelector("#product-grid");
@@ -37,7 +36,7 @@ function formatPrice(value) {
 
   return new Intl.NumberFormat("es-CR", {
     style: "currency",
-    currency: "CRC"
+    currency: "CRC",
   }).format(price);
 }
 
@@ -76,8 +75,21 @@ function createProductCard(product) {
   info.className = "product-info";
 
   const name = document.createElement("h3");
-  name.textContent =
-    product.name ?? product.title ?? "Producto sin nombre";
+  name.textContent = product.name ?? product.title ?? "Producto sin nombre";
+
+  const button = document.createElement("button");
+
+  button.type = "button";
+  button.className = "button button-primary";
+  button.textContent = "Ver producto";
+
+  button.addEventListener("click", () => {
+    const params = new URLSearchParams({
+      id: String(product.id),
+    });
+
+    window.location.href = `/product-detail.html?${params.toString()}`;
+  });
 
   const price = document.createElement("p");
   price.className = "product-price";
@@ -91,16 +103,12 @@ function createProductCard(product) {
   if (stockValue === undefined || stockValue === null) {
     stock.textContent = "";
   } else {
-    stock.textContent =
-      Number(stockValue) > 0 ? "Disponible" : "Agotado";
+    stock.textContent = Number(stockValue) > 0 ? "Disponible" : "Agotado";
 
-    stock.classList.toggle(
-      "out-of-stock",
-      Number(stockValue) <= 0
-    );
+    stock.classList.toggle("out-of-stock", Number(stockValue) <= 0);
   }
 
-  info.append(name, price, stock);
+  info.append(name, price, stock, button);
   card.append(imageContainer, info);
 
   return card;
@@ -109,7 +117,7 @@ function createProductCard(product) {
 async function loadProducts() {
   if (!productGrid || !productsMessage) {
     console.error(
-      "No se encontraron #product-grid o #products-message en index.html."
+      "No se encontraron #product-grid o #products-message en index.html.",
     );
     return;
   }
@@ -142,8 +150,7 @@ async function loadProducts() {
     console.error("Error al cargar productos:", error);
 
     if (error.response?.status === 401) {
-      productsMessage.textContent =
-        "Inicia sesión para consultar el catálogo.";
+      productsMessage.textContent = "Inicia sesión para consultar el catálogo.";
 
       const loginLink = document.createElement("a");
       loginLink.href = "/login.html";
