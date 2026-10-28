@@ -164,7 +164,7 @@ async function getOrCreateBackendCart() {
 }
 
 function getBackendCartItems(cart) {
-  return cart.cart_products || [];
+  return cart.products || cart.cart_products || [];
 }
 
 async function synchronizeCart() {
