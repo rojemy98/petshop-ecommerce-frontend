@@ -168,3 +168,6 @@ addButton.addEventListener("click", () => {
     cartMessage.className = "error-message";
   }
 });
+
+// Inicializar el contador del carrito al cargar el detalle.
+updateCartHeader();

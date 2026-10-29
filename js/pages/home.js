@@ -171,3 +171,38 @@ async function loadProducts() {
 
 updateCartHeader();
 loadProducts();
+
+/* Navegación activa según la sección visible */
+const navLinks = document.querySelectorAll(".main-nav .nav-link");
+
+const navSections = document.querySelectorAll(
+  "#inicio, #categorias, #destacados",
+);
+
+function updateActiveNav() {
+  const scrollPosition = window.scrollY + 160;
+  let currentSection = "inicio";
+
+  navSections.forEach((section) => {
+    if (section.offsetTop <= scrollPosition) {
+      currentSection = section.id;
+    }
+  });
+
+  navLinks.forEach((link) => {
+    const target = link.getAttribute("href");
+    const isActive = target === `#${currentSection}`;
+
+    link.classList.toggle("active", isActive);
+
+    if (isActive) {
+      link.setAttribute("aria-current", "location");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+}
+
+window.addEventListener("scroll", updateActiveNav, { passive: true });
+window.addEventListener("load", updateActiveNav);
+updateActiveNav();
