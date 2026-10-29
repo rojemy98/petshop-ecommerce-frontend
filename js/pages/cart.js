@@ -8,6 +8,9 @@ import {
 } from "../services/cart-service.js";
 
 import { updateCartHeader } from "../services/cart-header.js";
+
+import { validateSession } from "../services/auth-service.js";
+
 import {
   getActiveCart,
   createCart,
@@ -59,6 +62,17 @@ function showMessage(text, type = "") {
 function showCheckoutMessage(text, type = "") {
   checkoutMessage.textContent = text;
   checkoutMessage.className = type;
+}
+
+async function ensureValidSession() {
+  const session = await validateSession();
+
+  if (!session.valid) {
+    window.location.href = "/login.html";
+    return false;
+  }
+
+  return true;
 }
 
 function getErrorMessage(error) {
@@ -276,6 +290,14 @@ checkoutButton.addEventListener("click", async () => {
   checkoutButton.disabled = true;
 
   try {
+    showMessage("Validando sesión...", "");
+
+    const sessionIsValid = await ensureValidSession();
+
+    if (!sessionIsValid) {
+      return;
+    }
+
     showMessage("Preparando tu carrito...", "");
 
     await synchronizeCart();
@@ -403,7 +425,13 @@ confirmCheckoutButton.addEventListener("click", async () => {
   checkoutButton.disabled = true;
 
   try {
-    // Sincronizar el carrito antes de confirmar la compra.
+    const sessionIsValid = await ensureValidSession();
+
+    if (!sessionIsValid) {
+      return;
+    }
+
+    // Sincronizar el carrito antes de confirmar el checkout.
     const backendCart = await synchronizeCart();
 
     const result = await checkoutCart(backendCart.id, {
@@ -411,6 +439,8 @@ confirmCheckoutButton.addEventListener("click", async () => {
       payment_method: "CARD",
       payment_reference: `DEMO-${Date.now()}`,
     });
+
+    // limpiar carrito, mostrar confirmación, etc.
 
     // Limpiar el carrito local después de confirmar el checkout.
     clearCart();

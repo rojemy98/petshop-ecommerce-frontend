@@ -1,4 +1,5 @@
 import { getInvoices, getInvoiceByNumber } from "../api/invoices-api.js";
+import { validateSession } from "../services/auth-service.js";
 
 const invoicesMessage = document.querySelector("#invoices-message");
 const invoicesList = document.querySelector("#invoices-list");
@@ -222,19 +223,25 @@ backButton.addEventListener("click", () => {
 });
 
 async function init() {
-  if (!localStorage.getItem("access_token")) {
-    showMessage(
-      "Debes iniciar sesión para consultar tus facturas.",
-      "error-message",
-    );
-    return;
-  }
+  showMessage("Validando sesión...");
 
   try {
+    const session = await validateSession();
+
+    if (!session.valid) {
+      window.location.href = "/login.html";
+      return;
+    }
+
     const invoices = await getInvoices();
     renderInvoices(invoices);
   } catch (error) {
-    showMessage(getErrorMessage(error), "error-message");
+    showMessage(
+      error.response?.status >= 500 || !error.response
+        ? "No pudimos verificar tu sesión. Comprueba tu conexión e inténtalo nuevamente."
+        : getErrorMessage(error),
+      "error-message",
+    );
   }
 }
 
