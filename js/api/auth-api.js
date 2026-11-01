@@ -24,3 +24,9 @@ export async function updateUserProfile(profileData) {
   const response = await apiClient.put("/users/me", profileData);
   return response.data;
 }
+
+export async function changeUserPassword(passwordData) {
+  const response = await apiClient.put("/users/me/password", passwordData);
+
+  return response.data;
+}

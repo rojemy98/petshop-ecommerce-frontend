@@ -84,6 +84,67 @@
           </button>
         </form>
 
+        <section class="profile-security">
+          <div class="profile-security-heading">
+            <h2>Cambiar contraseña</h2>
+            <p>Mantén tu cuenta protegida utilizando una contraseña segura.</p>
+          </div>
+
+          <form id="password-form" novalidate>
+            <div class="form-field">
+              <label for="current-password">Contraseña actual</label>
+              <input
+                id="current-password"
+                name="current_password"
+                type="password"
+                autocomplete="current-password"
+                required
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="new-password">Nueva contraseña</label>
+              <input
+                id="new-password"
+                name="new_password"
+                type="password"
+                minlength="8"
+                maxlength="128"
+                autocomplete="new-password"
+                required
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="confirm-password">Confirmar nueva contraseña</label>
+              <input
+                id="confirm-password"
+                name="confirm_password"
+                type="password"
+                minlength="8"
+                maxlength="128"
+                autocomplete="new-password"
+                required
+              />
+            </div>
+
+            <p
+              id="password-message"
+              class="form-message"
+              role="alert"
+              aria-live="polite"
+            ></p>
+
+            <button
+              id="change-password-button"
+              class="button button-primary auth-submit"
+              type="submit"
+            >
+              Actualizar contraseña
+            </button>
+          </form>
+        </section>
+
         <p class="auth-footer">
           <a href="/index.html">Volver a la tienda</a>
         </p>

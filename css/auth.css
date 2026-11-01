@@ -133,3 +133,32 @@
     padding: 1.5rem;
   }
 }
+
+
+.profile-security {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border, #eadfd2);
+}
+
+.profile-security-heading {
+  margin-bottom: 1.5rem;
+}
+
+.profile-security-heading h2 {
+  margin: 0 0 0.5rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.profile-security-heading p {
+  color: var(--text-muted, #867568);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+#change-password-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}

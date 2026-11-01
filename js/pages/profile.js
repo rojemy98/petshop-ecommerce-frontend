@@ -1,5 +1,9 @@
 import { validateSession } from "../services/auth-service.js";
-import { getUserProfile, updateUserProfile } from "../api/auth-api.js";
+import {
+  getUserProfile,
+  updateUserProfile,
+  changeUserPassword,
+} from "../api/auth-api.js";
 
 const form = document.querySelector("#profile-form");
 
@@ -9,6 +13,58 @@ const emailInput = document.querySelector("#email");
 
 const message = document.querySelector("#form-message");
 const saveButton = document.querySelector("#save-profile-button");
+
+const passwordForm = document.querySelector("#password-form");
+
+const currentPasswordInput = document.querySelector("#current-password");
+const newPasswordInput = document.querySelector("#new-password");
+const confirmPasswordInput = document.querySelector("#confirm-password");
+
+const passwordMessage = document.querySelector("#password-message");
+const changePasswordButton = document.querySelector("#change-password-button");
+
+function showPasswordMessage(text, type = "error") {
+  passwordMessage.textContent = text;
+
+  passwordMessage.style.color = type === "success" ? "#386641" : "#a12b22";
+}
+
+function validatePasswordForm() {
+  const currentPassword = currentPasswordInput.value;
+  const newPassword = newPasswordInput.value;
+  const confirmPassword = confirmPasswordInput.value;
+
+  [currentPasswordInput, newPasswordInput, confirmPasswordInput].forEach(
+    (input) => {
+      input.setAttribute("aria-invalid", "false");
+    },
+  );
+
+  if (!currentPassword) {
+    currentPasswordInput.setAttribute("aria-invalid", "true");
+    showPasswordMessage("Ingresa tu contraseña actual.");
+    currentPasswordInput.focus();
+    return false;
+  }
+
+  if (newPassword.length < 8 || newPassword.length > 128) {
+    newPasswordInput.setAttribute("aria-invalid", "true");
+    showPasswordMessage(
+      "La nueva contraseña debe tener entre 8 y 128 caracteres.",
+    );
+    newPasswordInput.focus();
+    return false;
+  }
+
+  if (newPassword !== confirmPassword) {
+    confirmPasswordInput.setAttribute("aria-invalid", "true");
+    showPasswordMessage("Las contraseñas nuevas no coinciden.");
+    confirmPasswordInput.focus();
+    return false;
+  }
+
+  return true;
+}
 
 function showMessage(text, type = "error") {
   message.textContent = text;
@@ -143,6 +199,50 @@ form.addEventListener("submit", async (event) => {
   } finally {
     saveButton.disabled = false;
     saveButton.textContent = "Guardar cambios";
+  }
+});
+
+passwordForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  showPasswordMessage("");
+
+  if (!validatePasswordForm()) {
+    return;
+  }
+
+  const passwordData = {
+    current_password: currentPasswordInput.value,
+    new_password: newPasswordInput.value,
+    confirm_password: confirmPasswordInput.value,
+  };
+
+  changePasswordButton.disabled = true;
+  changePasswordButton.textContent = "Actualizando contraseña...";
+
+  try {
+    const response = await changeUserPassword(passwordData);
+
+    passwordForm.reset();
+
+    showPasswordMessage(
+      response.message || "Tu contraseña se actualizó correctamente.",
+      "success",
+    );
+  } catch (error) {
+    console.error("Error al cambiar la contraseña:", error);
+
+    if (error.response?.status === 401) {
+      window.location.href = "/login.html";
+      return;
+    }
+
+    showPasswordMessage(
+      error.response?.data?.message ||
+        "No fue posible actualizar tu contraseña. Inténtalo nuevamente.",
+    );
+  } finally {
+    changePasswordButton.disabled = false;
+    changePasswordButton.textContent = "Actualizar contraseña";
   }
 });
 
