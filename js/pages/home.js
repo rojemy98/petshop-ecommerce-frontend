@@ -1,8 +1,36 @@
 import { getProducts } from "../api/products-api.js";
 import { updateCartHeader } from "../services/cart-header.js";
+import { validateSession } from "../services/auth-service.js";
 
 const productGrid = document.querySelector("#product-grid");
 const productsMessage = document.querySelector("#products-message");
+
+async function renderAdminNavigation() {
+  try {
+    const session = await validateSession();
+
+    if (!session.valid || session.user.role !== "ADMIN") {
+      return;
+    }
+
+    const headerActions = document.querySelector(".header-actions");
+
+    if (!headerActions || document.querySelector("#admin-panel-link")) {
+      return;
+    }
+
+    const adminLink = document.createElement("a");
+
+    adminLink.id = "admin-panel-link";
+    adminLink.href = "/admin-products.html";
+    adminLink.textContent = "Administración";
+    adminLink.className = "account-link";
+
+    headerActions.prepend(adminLink);
+  } catch (error) {
+    console.error("Error al verificar el acceso administrativo:", error);
+  }
+}
 
 function normalizeProducts(response) {
   if (Array.isArray(response)) {
@@ -171,6 +199,7 @@ async function loadProducts() {
 
 updateCartHeader();
 loadProducts();
+renderAdminNavigation();
 
 /* Navegación activa según la sección visible */
 const navLinks = document.querySelectorAll(".main-nav .nav-link");
