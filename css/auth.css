@@ -162,3 +162,73 @@
   cursor: wait;
   opacity: 0.65;
 }
+
+
+.profile-addresses {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border, #eadfd2);
+}
+
+.profile-addresses-heading {
+  margin-bottom: 1.5rem;
+}
+
+.profile-addresses-heading h2 {
+  margin: 0 0 0.5rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.profile-addresses-heading p {
+  color: var(--text-muted, #867568);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.profile-address-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border, #eadfd2);
+  border-radius: 0.75rem;
+}
+
+.profile-address-card>div {
+  flex: 1;
+  min-width: 10rem;
+}
+
+.profile-address-card h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+}
+
+.profile-address-card p {
+  margin: 0;
+  color: var(--text-muted, #867568);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.profile-address-card button {
+  width: auto;
+}
+
+.profile-addresses #address-form {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+}
+
+.profile-addresses #address-form h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+}
+
+.profile-addresses #address-form button {
+  margin-top: 0.5rem;
+}

@@ -10,3 +10,18 @@ export async function createBillingAddress(addressData) {
 
   return response.data;
 }
+
+export async function updateBillingAddress(addressId, addressData) {
+  const response = await apiClient.put(
+    `/billing-addresses/${addressId}`,
+    addressData,
+  );
+
+  return response.data;
+}
+
+export async function deleteBillingAddress(addressId) {
+  const response = await apiClient.delete(`/billing-addresses/${addressId}`);
+
+  return response.status;
+}
