@@ -178,3 +178,58 @@
         width: 100%;
     }
 }
+
+.admin-sales {
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--white);
+}
+
+.admin-sales-heading h2 {
+    margin-top: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 500;
+}
+
+.admin-sales-heading p {
+    color: var(--text-muted);
+}
+
+.sales-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.sales-summary-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: var(--cream);
+}
+
+.sales-summary-card span {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.sales-summary-card strong {
+    color: var(--brown-dark);
+    font-size: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .admin-sales {
+        padding: 1.25rem;
+    }
+
+    .sales-summary {
+        grid-template-columns: 1fr;
+    }
+}

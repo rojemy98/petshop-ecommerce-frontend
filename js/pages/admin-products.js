@@ -6,6 +6,8 @@ import {
   updateProduct,
 } from "../api/products-api.js";
 
+import { getInvoices } from "../api/invoices-api.js";
+
 const formSection = document.querySelector("#product-form-section");
 const productForm = document.querySelector("#product-form");
 const formTitle = document.querySelector("#product-form-title");
@@ -24,8 +26,95 @@ const productsMessage = document.querySelector("#products-message");
 const searchInput = document.querySelector("#product-search");
 const categoryInput = document.querySelector("#product-category");
 
+const salesMessage = document.querySelector("#sales-message");
+const salesTableBody = document.querySelector("#sales-table-body");
+const totalInvoicesElement = document.querySelector("#total-invoices");
+const totalSalesElement = document.querySelector("#total-sales");
+
 let products = [];
 let editingProductId = null;
+
+function formatDate(value) {
+  if (!value) return "Fecha no disponible";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Fecha no disponible";
+  }
+
+  return new Intl.DateTimeFormat("es-CR", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date);
+}
+
+function renderSales(invoices) {
+  salesTableBody.replaceChildren();
+
+  if (!Array.isArray(invoices)) {
+    salesMessage.textContent =
+      "La respuesta de ventas no tiene un formato válido.";
+    return;
+  }
+
+  totalInvoicesElement.textContent = invoices.length;
+
+  const paidInvoices = invoices.filter((invoice) => invoice.status === "PAID");
+
+  const totalSales = paidInvoices.reduce(
+    (total, invoice) => total + Number(invoice.total || 0),
+    0,
+  );
+
+  totalSalesElement.textContent = formatPrice(totalSales);
+
+  if (invoices.length === 0) {
+    salesMessage.textContent = "Todavía no hay ventas registradas.";
+    return;
+  }
+
+  salesMessage.textContent = `Se encontraron ${invoices.length} factura(s).`;
+
+  const fragment = document.createDocumentFragment();
+
+  invoices.forEach((invoice) => {
+    const row = document.createElement("tr");
+
+    row.append(
+      createCell(invoice.invoice_number),
+      createCell(invoice.user_id),
+      createCell(formatDate(invoice.purchase_date)),
+      createCell(invoice.status),
+      createCell(formatPrice(invoice.total)),
+    );
+
+    fragment.append(row);
+  });
+
+  salesTableBody.append(fragment);
+}
+
+async function loadSales() {
+  salesMessage.textContent = "Cargando ventas...";
+
+  try {
+    const invoices = await getInvoices();
+
+    renderSales(invoices);
+  } catch (error) {
+    console.error("Error al cargar ventas:", error);
+
+    if (error.response?.status === 401) {
+      window.location.href = "/login.html";
+      return;
+    }
+
+    salesMessage.textContent =
+      error.response?.data?.message ||
+      "No fue posible cargar el historial de ventas.";
+  }
+}
 
 function normalizeProducts(response) {
   if (Array.isArray(response)) return response;
@@ -307,7 +396,7 @@ async function initializeAdminPage() {
       return;
     }
 
-    await loadProducts();
+    await Promise.all([loadProducts(), loadSales()]);
   } catch (error) {
     console.error("Error al validar sesión:", error);
 

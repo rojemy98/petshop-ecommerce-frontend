@@ -160,6 +160,51 @@
           </table>
         </div>
       </section>
+      <section class="admin-sales">
+        <div class="admin-sales-heading">
+          <div>
+            <h2>Ventas</h2>
+            <p>Consulta el historial de compras de los clientes.</p>
+          </div>
+        </div>
+
+        <div class="sales-summary">
+          <article class="sales-summary-card">
+            <span>Facturas registradas</span>
+            <strong id="total-invoices">0</strong>
+          </article>
+
+          <article class="sales-summary-card">
+            <span>Total de ventas pagadas</span>
+            <strong id="total-sales">₡0</strong>
+          </article>
+        </div>
+
+        <p
+          id="sales-message"
+          class="status-message"
+          role="status"
+          aria-live="polite"
+        >
+          Cargando ventas...
+        </p>
+
+        <div class="admin-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Factura</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+
+            <tbody id="sales-table-body"></tbody>
+          </table>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
