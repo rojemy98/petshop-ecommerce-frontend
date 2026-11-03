@@ -395,26 +395,6 @@ a:focus-visible {
   line-height: 1.6;
 }
 
-.site-footer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 2rem 7%;
-  background: var(--brown-dark);
-  color: var(--cream);
-}
-
-.site-footer .brand {
-  color: var(--cream);
-}
-
-.site-footer p,
-.site-footer small {
-  color: #e2d1c0;
-}
-
 @media (max-width: 55rem) {
   .site-header {
     flex-wrap: wrap;
@@ -498,11 +478,6 @@ a:focus-visible {
     grid-template-columns: 1fr;
     gap: 1rem;
     padding: 2.5rem 8%;
-  }
-
-  .site-footer {
-    flex-direction: column;
-    align-items: flex-start;
   }
 }
 
@@ -922,5 +897,86 @@ a:focus-visible {
   .catalog-filters select,
   .catalog-filters button {
     width: 100%;
+  }
+}
+
+.site-footer {
+  padding: 2rem 7%;
+  background: var(--brown-dark);
+  color: var(--cream);
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  max-width: 90rem;
+  margin: 0 auto;
+}
+
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--cream);
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.footer-brand span:last-child span {
+  font-weight: 400;
+}
+
+.footer-brand-icon {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 10%);
+  color: #e9c9a9;
+  font-size: 1.4rem;
+}
+
+.footer-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.footer-nav a {
+  color: #e2d1c0;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.footer-nav a:hover {
+  color: #fff;
+}
+
+.footer-copyright {
+  color: #cbb6a3;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 45rem) {
+  .site-footer {
+    padding: 2rem 6%;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.25rem;
+  }
+
+  .footer-nav {
+    justify-content: center;
+    gap: 1.2rem;
   }
 }
