@@ -980,3 +980,59 @@ a:focus-visible {
     gap: 1.2rem;
   }
 }
+
+/* ===== Paginación del catálogo ===== */
+
+.products-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  padding: 1rem 0;
+}
+
+.products-pagination[hidden] {
+  display: none;
+}
+
+.pagination-button {
+  min-height: 2.8rem;
+  padding: 0.7rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--white);
+  color: var(--brown-dark);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background: var(--brown);
+  color: var(--white);
+}
+
+.pagination-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#pagination-info {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+@media (max-width: 35rem) {
+  .products-pagination {
+    gap: 0.6rem;
+  }
+
+  .pagination-button {
+    padding: 0.65rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}

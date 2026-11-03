@@ -142,6 +142,27 @@
         </div>
 
         <div class="product-grid" id="product-grid"></div>
+        <nav
+          id="products-pagination"
+          class="products-pagination"
+          aria-label="Paginación de productos"
+          hidden
+        >
+          <button
+            type="button"
+            id="previous-page"
+            class="pagination-button"
+            disabled
+          >
+            ← Anterior
+          </button>
+
+          <span id="pagination-info" aria-live="polite"> Página 1 de 1 </span>
+
+          <button type="button" id="next-page" class="pagination-button">
+            Siguiente →
+          </button>
+        </nav>
       </section>
     </main>
 

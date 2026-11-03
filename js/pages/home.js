@@ -10,6 +10,15 @@ const clearFiltersButton = document.querySelector("#clear-filters");
 
 let allProducts = [];
 
+const pagination = document.querySelector("#products-pagination");
+const previousPageButton = document.querySelector("#previous-page");
+const nextPageButton = document.querySelector("#next-page");
+const paginationInfo = document.querySelector("#pagination-info");
+
+const PRODUCTS_PER_PAGE = 10;
+
+let currentPage = 1;
+
 function filterProducts() {
   const searchTerm = searchInput.value.trim().toLowerCase();
   const selectedCategory = categoryFilter.value.toLowerCase();
@@ -28,17 +37,42 @@ function filterProducts() {
   if (filteredProducts.length === 0) {
     productsMessage.textContent =
       "No encontramos productos con esos criterios.";
+
+    pagination.hidden = true;
     return;
   }
 
+  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+
+  // Evitar permanecer en una página que ya no existe.
+  currentPage = Math.min(currentPage, totalPages);
+
+  const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  const endIndex = startIndex + PRODUCTS_PER_PAGE;
+
+  const productsToDisplay = filteredProducts.slice(startIndex, endIndex);
+
   const fragment = document.createDocumentFragment();
 
-  filteredProducts.forEach((product) => {
+  productsToDisplay.forEach((product) => {
     fragment.appendChild(createProductCard(product));
   });
 
   productGrid.appendChild(fragment);
+
   productsMessage.textContent = "";
+
+  updatePagination(totalPages);
+}
+
+function updatePagination(totalPages) {
+  pagination.hidden = totalPages <= 1;
+
+  paginationInfo.textContent = `Página ${currentPage} de ${totalPages}`;
+
+  previousPageButton.disabled = currentPage === 1;
+
+  nextPageButton.disabled = currentPage === totalPages;
 }
 
 async function renderAdminNavigation() {
@@ -267,14 +301,21 @@ window.addEventListener("scroll", updateActiveNav, { passive: true });
 window.addEventListener("load", updateActiveNav);
 updateActiveNav();
 
-searchInput.addEventListener("input", filterProducts);
+searchInput.addEventListener("input", () => {
+  currentPage = 1;
+  filterProducts();
+});
 
-categoryFilter.addEventListener("change", filterProducts);
+categoryFilter.addEventListener("change", () => {
+  currentPage = 1;
+  filterProducts();
+});
 
 clearFiltersButton.addEventListener("click", () => {
   searchInput.value = "";
   categoryFilter.value = "";
 
+  currentPage = 1;
   filterProducts();
 });
 
@@ -291,7 +332,30 @@ document.querySelectorAll(".category-card").forEach((card) => {
     };
 
     categoryFilter.value = categoryMap[category] || "";
+    currentPage = 1;
 
     filterProducts();
+  });
+});
+
+previousPageButton.addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    filterProducts();
+
+    document.querySelector("#destacados").scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+});
+
+nextPageButton.addEventListener("click", () => {
+  currentPage++;
+  filterProducts();
+
+  document.querySelector("#destacados").scrollIntoView({
+    behavior: "smooth",
+    block: "start",
   });
 });
