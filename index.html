@@ -107,7 +107,31 @@
             </p>
           </div>
         </div>
+        <div class="catalog-filters">
+          <input
+            type="search"
+            id="product-search"
+            placeholder="Buscar productos..."
+            aria-label="Buscar productos por nombre"
+          />
 
+          <select id="category-filter" aria-label="Filtrar por categoría">
+            <option value="">Todas las categorías</option>
+            <option value="Alimentos">Alimentos</option>
+            <option value="Accesorios">Accesorios</option>
+            <option value="Higiene">Higiene</option>
+            <option value="Camas y descanso">Camas y descanso</option>
+            <option value="Juguetes">Juguetes</option>
+          </select>
+
+          <button
+            type="button"
+            id="clear-filters"
+            class="button button-secondary"
+          >
+            Limpiar filtros
+          </button>
+        </div>
         <div
           id="products-message"
           class="status-message"

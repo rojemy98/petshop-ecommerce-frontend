@@ -62,6 +62,18 @@
           </div>
 
           <div class="form-field">
+            <label for="product-category">Categoría</label>
+            <select id="product-category" name="category" required>
+              <option value="">Selecciona una categoría</option>
+              <option value="Alimentos">Alimentos</option>
+              <option value="Accesorios">Accesorios</option>
+              <option value="Higiene">Higiene</option>
+              <option value="Camas y descanso">Camas y descanso</option>
+              <option value="Juguetes">Juguetes</option>
+            </select>
+          </div>
+
+          <div class="form-field">
             <label for="product-price">Precio</label>
             <input
               id="product-price"
@@ -137,6 +149,7 @@
               <tr>
                 <th>ID</th>
                 <th>Producto</th>
+                <th>Categoría</th>
                 <th>Precio</th>
                 <th>Inventario</th>
                 <th>Estado</th>

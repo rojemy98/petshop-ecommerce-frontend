@@ -4,6 +4,42 @@ import { validateSession } from "../services/auth-service.js";
 
 const productGrid = document.querySelector("#product-grid");
 const productsMessage = document.querySelector("#products-message");
+const searchInput = document.querySelector("#product-search");
+const categoryFilter = document.querySelector("#category-filter");
+const clearFiltersButton = document.querySelector("#clear-filters");
+
+let allProducts = [];
+
+function filterProducts() {
+  const searchTerm = searchInput.value.trim().toLowerCase();
+  const selectedCategory = categoryFilter.value.toLowerCase();
+
+  const filteredProducts = allProducts.filter((product) => {
+    const matchesName = product.name.toLowerCase().includes(searchTerm);
+
+    const matchesCategory =
+      !selectedCategory || product.category?.toLowerCase() === selectedCategory;
+
+    return matchesName && matchesCategory;
+  });
+
+  productGrid.replaceChildren();
+
+  if (filteredProducts.length === 0) {
+    productsMessage.textContent =
+      "No encontramos productos con esos criterios.";
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  filteredProducts.forEach((product) => {
+    fragment.appendChild(createProductCard(product));
+  });
+
+  productGrid.appendChild(fragment);
+  productsMessage.textContent = "";
+}
 
 async function renderAdminNavigation() {
   try {
@@ -159,22 +195,17 @@ async function loadProducts() {
 
     console.log("Respuesta del catálogo:", response);
 
-    const products = normalizeProducts(response);
+    // Guardar todos los productos para aplicar los filtros.
+    allProducts = normalizeProducts(response);
 
-    if (products.length === 0) {
+    if (allProducts.length === 0) {
       productsMessage.textContent =
         "No hay productos disponibles para mostrar.";
       return;
     }
 
-    const fragment = document.createDocumentFragment();
-
-    products.forEach((product) => {
-      fragment.appendChild(createProductCard(product));
-    });
-
-    productGrid.appendChild(fragment);
-    productsMessage.textContent = "";
+    // Mostrar productos aplicando los filtros actuales.
+    filterProducts();
   } catch (error) {
     console.error("Error al cargar productos:", error);
 
@@ -235,3 +266,32 @@ function updateActiveNav() {
 window.addEventListener("scroll", updateActiveNav, { passive: true });
 window.addEventListener("load", updateActiveNav);
 updateActiveNav();
+
+searchInput.addEventListener("input", filterProducts);
+
+categoryFilter.addEventListener("change", filterProducts);
+
+clearFiltersButton.addEventListener("click", () => {
+  searchInput.value = "";
+  categoryFilter.value = "";
+
+  filterProducts();
+});
+
+document.querySelectorAll(".category-card").forEach((card) => {
+  card.addEventListener("click", () => {
+    const category = card.dataset.category;
+
+    const categoryMap = {
+      alimentos: "Alimentos",
+      accesorios: "Accesorios",
+      higiene: "Higiene",
+      camas: "Camas y descanso",
+      juguetes: "Juguetes",
+    };
+
+    categoryFilter.value = categoryMap[category] || "";
+
+    filterProducts();
+  });
+});

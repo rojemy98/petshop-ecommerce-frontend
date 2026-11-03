@@ -22,6 +22,7 @@ const saveButton = document.querySelector("#save-product-button");
 const tableBody = document.querySelector("#products-table-body");
 const productsMessage = document.querySelector("#products-message");
 const searchInput = document.querySelector("#product-search");
+const categoryInput = document.querySelector("#product-category");
 
 let products = [];
 let editingProductId = null;
@@ -74,6 +75,7 @@ function openEditForm(product) {
   nameInput.value = product.name;
   priceInput.value = product.price;
   stockInput.value = product.stock;
+  categoryInput.value = product.category;
 
   formTitle.textContent = "Editar producto";
   saveButton.textContent = "Actualizar producto";
@@ -155,6 +157,7 @@ function renderProducts() {
     row.append(
       createCell(product.id),
       createCell(product.name),
+      createCell(product.category),
       createCell(formatPrice(product.price)),
       createCell(product.stock),
       statusCell,
@@ -220,6 +223,13 @@ function validateProductForm() {
   const name = nameInput.value.trim();
   const price = Number(priceInput.value);
   const stock = Number(stockInput.value);
+  const category = categoryInput.value.trim();
+
+  if (!category) {
+    showFormMessage("Selecciona una categoría.");
+    categoryInput.focus();
+    return false;
+  }
 
   if (!name || name.length > 150) {
     showFormMessage("Ingresa un nombre válido.");
@@ -250,6 +260,7 @@ productForm.addEventListener("submit", async (event) => {
 
   const productData = {
     name: nameInput.value.trim(),
+    category: categoryInput.value,
     price: Number(priceInput.value),
     stock: Number(stockInput.value),
   };

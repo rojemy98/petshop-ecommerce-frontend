@@ -885,3 +885,42 @@ a:focus-visible {
     justify-content: flex-start;
   }
 }
+
+.catalog-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.catalog-filters input,
+.catalog-filters select {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #ded5c9;
+  border-radius: 8px;
+  background: #fff;
+  color: #46382f;
+  font: inherit;
+}
+
+.catalog-filters input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.catalog-filters select {
+  min-width: 190px;
+}
+
+@media (max-width: 600px) {
+  .catalog-filters {
+    flex-direction: column;
+  }
+
+  .catalog-filters input,
+  .catalog-filters select,
+  .catalog-filters button {
+    width: 100%;
+  }
+}
