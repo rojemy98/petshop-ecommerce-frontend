@@ -1,5 +1,5 @@
 .admin-main {
-    width: min(1200px, 90%);
+    width: min(75rem, 90%);
     min-height: 70vh;
     margin: 0 auto;
     padding: 3rem 0;
@@ -153,7 +153,7 @@
     font-size: 0.8rem;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 43.75rem) {
 
     .admin-heading,
     .admin-catalog-heading {
@@ -224,7 +224,7 @@
     font-size: 1.5rem;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 37.5rem) {
     .admin-sales {
         padding: 1.25rem;
     }

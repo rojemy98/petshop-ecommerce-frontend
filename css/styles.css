@@ -600,9 +600,9 @@ a:focus-visible {
   position: sticky;
   top: 0;
   z-index: 100;
-  min-height: 76px;
+  min-height: 4.75rem;
   padding: 1rem clamp(1rem, 5vw, 5rem);
-  box-shadow: 0 3px 14px rgb(56 39 30 / 4%);
+  box-shadow: 0 0.1875rem 0.875rem rgb(56 39 30 / 4%);
 }
 
 .brand {
@@ -641,9 +641,9 @@ a:focus-visible {
   right: 0;
   bottom: 0;
   left: 0;
-  height: 2px;
+  height: 0.125rem;
   background: var(--brown);
-  border-radius: 2px;
+  border-radius: 0.125rem;
   content: "";
 }
 
@@ -758,7 +758,7 @@ a:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 42px;
+  min-height: 2.625rem;
   padding: 0.65rem 0.8rem;
   border-radius: 0.65rem;
   text-decoration: none;
@@ -797,7 +797,7 @@ a:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
-  min-height: 42px;
+  min-height: 2.625rem;
   padding: 0.65rem 1rem;
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -829,7 +829,7 @@ a:focus-visible {
   font-weight: 700;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 43.75rem) {
   .site-header {
     flex-wrap: wrap;
     gap: 1rem;
@@ -854,7 +854,7 @@ a:focus-visible {
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 26.25rem) {
   .header-actions {
     width: 100%;
     justify-content: flex-start;
@@ -864,16 +864,16 @@ a:focus-visible {
 .catalog-filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin: 24px 0;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
 }
 
 .catalog-filters input,
 .catalog-filters select {
-  min-height: 44px;
-  padding: 10px 14px;
+  min-height: 2.75rem;
+  padding: 0.625rem 0.875rem;
   border: 1px solid #ded5c9;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   background: #fff;
   color: #46382f;
   font: inherit;
@@ -881,14 +881,14 @@ a:focus-visible {
 
 .catalog-filters input {
   flex: 1;
-  min-width: 200px;
+  min-width: 12.5rem;
 }
 
 .catalog-filters select {
-  min-width: 190px;
+  min-width: 11.875rem;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 37.5rem) {
   .catalog-filters {
     flex-direction: column;
   }
