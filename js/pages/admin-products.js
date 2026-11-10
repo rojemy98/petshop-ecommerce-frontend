@@ -1,4 +1,6 @@
-import { validateSession, logout } from "../services/auth-service.js";
+import { formatPrice, formatDate } from "../utils/formatters.js";
+import { formatMessage } from "../utils/messages.js";
+import { validateSession } from "../services/auth-service.js";
 
 import {
   getAdminProducts,
@@ -33,21 +35,6 @@ const totalSalesElement = document.querySelector("#total-sales");
 
 let products = [];
 let editingProductId = null;
-
-function formatDate(value) {
-  if (!value) return "Fecha no disponible";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return "Fecha no disponible";
-  }
-
-  return new Intl.DateTimeFormat("es-CR", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(date);
-}
 
 function renderSales(invoices) {
   salesTableBody.replaceChildren();
@@ -122,16 +109,8 @@ function normalizeProducts(response) {
   return [];
 }
 
-function formatPrice(value) {
-  return new Intl.NumberFormat("es-CR", {
-    style: "currency",
-    currency: "CRC",
-  }).format(Number(value));
-}
-
 function showFormMessage(message, type = "error") {
-  formMessage.textContent = message;
-  formMessage.style.color = type === "success" ? "#386641" : "#a12b22";
+  formatMessage(formMessage, message, type);
 }
 
 function resetForm() {

@@ -1,8 +1,16 @@
 const CART_KEY = "mokka_pets_cart";
+const TOKEN_KEY = "access_token";
+
+function getCartKey() {
+  const token = localStorage.getItem(TOKEN_KEY);
+
+  return token ? `${CART_KEY}:${token}` : `${CART_KEY}:guest`;
+}
 
 function readCart() {
   try {
-    const cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    const cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
+
     return Array.isArray(cart) ? cart : [];
   } catch {
     return [];
@@ -10,7 +18,7 @@ function readCart() {
 }
 
 function saveCart(cart) {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  localStorage.setItem(getCartKey(), JSON.stringify(cart));
 }
 
 export function getCart() {
@@ -30,6 +38,7 @@ export function addToCart(product, quantity = 1) {
   }
 
   const cart = readCart();
+
   const existingItem = cart.find(
     (item) => String(item.id) === String(product.id),
   );
@@ -50,17 +59,18 @@ export function addToCart(product, quantity = 1) {
       price: Number(product.price),
       stock,
       quantity: amount,
-      image_url: product.image_url ?? product.image ?? null,
     });
   }
 
   saveCart(cart);
+
   return cart;
 }
 
 export function updateCartQuantity(productId, quantity) {
   const amount = Number(quantity);
   const cart = readCart();
+
   const item = cart.find((product) => String(product.id) === String(productId));
 
   if (!item) {
@@ -76,6 +86,7 @@ export function updateCartQuantity(productId, quantity) {
   }
 
   item.quantity = amount;
+
   saveCart(cart);
 
   return cart;
@@ -87,28 +98,29 @@ export function removeFromCart(productId) {
   );
 
   saveCart(cart);
+
   return cart;
 }
 
 export function clearCart() {
-  localStorage.removeItem(CART_KEY);
+  localStorage.removeItem(getCartKey());
 }
 
 export function getCartCount() {
-  return readCart().reduce((total, item) => total + item.quantity, 0);
+  return readCart().reduce((total, item) => total + Number(item.quantity), 0);
 }
 
 export function getCartTotal() {
   return readCart().reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + Number(item.price) * Number(item.quantity),
     0,
   );
 }
 
 export function getCartItemQuantity(productId) {
-  const cart = readCart();
-
-  const item = cart.find((product) => String(product.id) === String(productId));
+  const item = readCart().find(
+    (product) => String(product.id) === String(productId),
+  );
 
   return item ? Number(item.quantity) : 0;
 }

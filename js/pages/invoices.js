@@ -1,3 +1,4 @@
+import { formatPrice, formatDate } from "../utils/formatters.js";
 import { getInvoices, getInvoiceByNumber } from "../api/invoices-api.js";
 import { validateSession } from "../services/auth-service.js";
 
@@ -6,28 +7,6 @@ const invoicesList = document.querySelector("#invoices-list");
 const invoiceDetail = document.querySelector("#invoice-detail");
 const invoiceDetailContent = document.querySelector("#invoice-detail-content");
 const backButton = document.querySelector("#back-to-invoices");
-
-function formatPrice(value) {
-  return new Intl.NumberFormat("es-CR", {
-    style: "currency",
-    currency: "CRC",
-  }).format(Number(value) || 0);
-}
-
-function formatDate(value) {
-  if (!value) return "Fecha no disponible";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return "Fecha no disponible";
-  }
-
-  return new Intl.DateTimeFormat("es-CR", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(date);
-}
 
 function showMessage(message, type = "") {
   invoicesMessage.textContent = message;
