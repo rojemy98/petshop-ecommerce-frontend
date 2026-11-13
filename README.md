@@ -394,7 +394,7 @@ This separation allows both applications to be developed, maintained, and deploy
 
 ## 10. Author
 
-**Rojemy Emanuel Diaz.**
+**Rojemy Emanuel Diaz**
 
 GitHub: https://github.com/rojemy98
 
