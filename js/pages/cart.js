@@ -1,3 +1,4 @@
+import { renderSessionHeader } from "../services/session-header.js";
 import {
   getCart,
   updateCartQuantity,
@@ -11,6 +12,8 @@ import { updateCartHeader } from "../services/cart-header.js";
 import { validateSession } from "../services/auth-service.js";
 import { formatPrice } from "../utils/formatters.js";
 import { formatMessage } from "../utils/messages.js";
+
+renderSessionHeader();
 
 const list = document.querySelector("#cart-items"),
   msg = document.querySelector("#cart-message"),

@@ -1,5 +1,6 @@
 
 import { login } from "../services/auth-service.js";
+import { formatMessage } from "../utils/messages.js";
 
 const form = document.querySelector("#login-form");
 const emailInput = document.querySelector("#email");
@@ -7,8 +8,8 @@ const passwordInput = document.querySelector("#password");
 const message = document.querySelector("#form-message");
 const submitButton = document.querySelector("#login-button");
 
-function showMessage(text) {
-  message.textContent = text;
+function showMessage(text, type = "error") {
+  formatMessage(message, text, text ? type : "");
 }
 
 function validateForm() {

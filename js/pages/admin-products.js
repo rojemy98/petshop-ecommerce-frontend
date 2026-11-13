@@ -1,3 +1,4 @@
+import { renderSessionHeader } from "../services/session-header.js";
 import { formatPrice, formatDate } from "../utils/formatters.js";
 import { formatMessage } from "../utils/messages.js";
 import { validateSession } from "../services/auth-service.js";
@@ -9,6 +10,8 @@ import {
 } from "../api/products-api.js";
 
 import { getInvoices } from "../api/invoices-api.js";
+
+renderSessionHeader();
 
 const formSection = document.querySelector("#product-form-section");
 const productForm = document.querySelector("#product-form");
@@ -101,12 +104,6 @@ async function loadSales() {
       error.response?.data?.message ||
       "No fue posible cargar el historial de ventas.";
   }
-}
-
-function normalizeProducts(response) {
-  if (Array.isArray(response)) return response;
-  if (Array.isArray(response?.products)) return response.products;
-  return [];
 }
 
 function showFormMessage(message, type = "error") {
@@ -242,9 +239,7 @@ async function loadProducts() {
   productsMessage.textContent = "Cargando productos...";
 
   try {
-    const response = await getAdminProducts();
-
-    products = normalizeProducts(response);
+    products = await getAdminProducts();
 
     renderProducts();
   } catch (error) {

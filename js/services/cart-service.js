@@ -1,10 +1,69 @@
+import { getUserId } from "./session-storage.js";
+
 const CART_KEY = "mokka_pets_cart";
-const TOKEN_KEY = "access_token";
 
 function getCartKey() {
-  const token = localStorage.getItem(TOKEN_KEY);
+  const userId = getUserId();
 
-  return token ? `${CART_KEY}:${token}` : `${CART_KEY}:guest`;
+  return userId ? `${CART_KEY}:user:${userId}` : `${CART_KEY}:guest`;
+}
+
+export function migrateCartToUser(userId, previousToken) {
+  if (!userId || !previousToken) return;
+
+  const stableKey = `${CART_KEY}:user:${userId}`;
+  const legacyKey = `${CART_KEY}:${previousToken}`;
+  const legacyCart = localStorage.getItem(legacyKey);
+
+  if (legacyCart) {
+    let legacyItems = [];
+    let stableItems = [];
+
+    try {
+      legacyItems = JSON.parse(legacyCart);
+      stableItems = JSON.parse(localStorage.getItem(stableKey) || "[]");
+    } catch {
+      legacyItems = [];
+      stableItems = [];
+    }
+
+    if (!Array.isArray(legacyItems)) legacyItems = [];
+    if (!Array.isArray(stableItems)) stableItems = [];
+
+    const mergedItems = [...stableItems];
+
+    legacyItems.forEach((legacyItem) => {
+      const existingItem = mergedItems.find(
+        (item) => String(item.id) === String(legacyItem.id),
+      );
+
+      if (existingItem) {
+        const maximumStock = Number(existingItem.stock ?? legacyItem.stock);
+        existingItem.quantity = Math.min(
+          maximumStock,
+          Number(existingItem.quantity) + Number(legacyItem.quantity),
+        );
+      } else {
+        mergedItems.push(legacyItem);
+      }
+    });
+
+    localStorage.setItem(stableKey, JSON.stringify(mergedItems));
+  }
+
+  // Remove legacy token-keyed carts after migrating the active session.
+  for (let index = localStorage.length - 1; index >= 0; index -= 1) {
+    const key = localStorage.key(index);
+
+    if (
+      key?.startsWith(`${CART_KEY}:`) &&
+      !key.startsWith(`${CART_KEY}:user:`) &&
+      key !== stableKey &&
+      key !== `${CART_KEY}:guest`
+    ) {
+      localStorage.removeItem(key);
+    }
+  }
 }
 
 function readCart() {

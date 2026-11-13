@@ -1,9 +1,19 @@
 import { loginRequest, getCurrentUser } from "../api/auth-api.js";
-import { clearCart } from "./cart-service.js";
+import { clearCart, migrateCartToUser } from "./cart-service.js";
+import {
+  getToken,
+  getUserId,
+  saveUserId,
+  migrateLastPurchase,
+  removeLastPurchase,
+  TOKEN_KEY,
+  USER_ID_KEY,
+} from "./session-storage.js";
 
-const TOKEN_KEY = "access_token";
+export { getToken, getUserId };
 
 export async function login(email, password) {
+  const previousToken = getToken();
   const data = await loginRequest({ email, password });
 
   if (
@@ -15,18 +25,34 @@ export async function login(email, password) {
 
   localStorage.setItem(TOKEN_KEY, data.access_token);
 
-  return data;
-}
+  try {
+    const currentUser = await getCurrentUser();
+    const userId = currentUser.user?.id;
 
-export function getToken() {
-  return localStorage.getItem(TOKEN_KEY);
+    if (userId === null || userId === undefined) {
+      throw new Error("El servidor no devolvió el identificador del usuario.");
+    }
+
+    saveUserId(userId);
+    migrateCartToUser(userId, previousToken);
+    migrateLastPurchase(previousToken, userId);
+
+    return data;
+  } catch (error) {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_ID_KEY);
+    throw error;
+  }
 }
 
 export function logout() {
-  // Eliminar el carrito asociado a la sesión actual.
+  const userId = getUserId();
+
   clearCart();
+  removeLastPurchase(userId);
 
   localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_ID_KEY);
 
   window.location.href = "/login.html";
 }
@@ -55,6 +81,16 @@ export async function validateSession() {
       };
     }
 
+    const userId = data.user.id;
+
+    if (userId === null || userId === undefined) {
+      throw new Error("El servidor no devolvió el identificador del usuario.");
+    }
+
+    saveUserId(userId);
+    migrateCartToUser(userId, token);
+    migrateLastPurchase(token, userId);
+
     return {
       valid: true,
       user: data.user,
@@ -63,6 +99,7 @@ export async function validateSession() {
     if (error.response?.status === 401) {
       clearCart();
       localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_ID_KEY);
 
       return {
         valid: false,
@@ -70,20 +107,6 @@ export async function validateSession() {
       };
     }
 
-    // Un error de conexión no significa necesariamente que
-    // la sesión haya expirado.
     throw error;
   }
 }
-
-// Añade una acción de cierre de sesión a la navegación de páginas autenticadas.
-function addLogoutControl() {
-  if (!getToken() || document.querySelector("#logout-button")) return;
-  const nav = document.querySelector(".site-header nav");
-  if (!nav) return;
-  const button = document.createElement("button");
-  button.id = "logout-button"; button.type = "button"; button.className = "button button-secondary"; button.textContent = "Cerrar sesión";
-  button.addEventListener("click", logout); nav.append(button);
-}
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", addLogoutControl);
-else addLogoutControl();

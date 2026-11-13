@@ -1,10 +1,14 @@
+import { renderSessionHeader } from "../services/session-header.js";
 import { formatPrice } from "../utils/formatters.js";
 import { getProductById } from "../api/products-api.js";
 import { addToCart, getCartItemQuantity } from "../services/cart-service.js";
 import { updateCartHeader } from "../services/cart-header.js";
 
+renderSessionHeader();
+
 const message = document.querySelector("#detail-message");
 const detail = document.querySelector("#product-detail");
+const addButton = document.querySelector("#add-to-cart");
 
 const productId = new URLSearchParams(window.location.search).get("id");
 
@@ -17,8 +21,7 @@ async function loadProduct() {
   }
 
   try {
-    const response = await getProductById(productId);
-    const product = response;
+    const product = await getProductById(productId);
 
     currentProduct = product;
 
@@ -55,7 +58,6 @@ async function loadProduct() {
     quantity.disabled = availableStock <= 0;
 
     // Deshabilitar el botón si no quedan unidades.
-    const addButton = document.querySelector("#add-to-cart");
     addButton.disabled = availableStock <= 0;
 
     message.textContent = "";
@@ -75,7 +77,6 @@ async function loadProduct() {
 
 loadProduct();
 
-const addButton = document.querySelector("#add-to-cart");
 const quantityInput = document.querySelector("#quantity");
 const cartMessage = document.querySelector("#cart-message");
 

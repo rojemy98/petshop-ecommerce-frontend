@@ -1,7 +1,10 @@
+import { renderSessionHeader } from "../services/session-header.js";
 import { getInvoiceByNumber } from "../api/invoices-api.js";
-import { validateSession, getToken } from "../services/auth-service.js";
+import { validateSession, getUserId } from "../services/auth-service.js";
 import { formatPrice } from "../utils/formatters.js";
 import { formatMessage } from "../utils/messages.js";
+
+renderSessionHeader();
 
 const invoice = document.querySelector("#confirmation-invoice"),
   total = document.querySelector("#confirmation-total"),
@@ -19,7 +22,7 @@ async function init() {
 
   try {
     saved = JSON.parse(
-      localStorage.getItem(`mokka_pets_last_purchase:${getToken()}`) || "null",
+      localStorage.getItem(`mokka_pets_last_purchase:user:${getUserId()}`) || "null",
     );
   } catch {
     saved = null;

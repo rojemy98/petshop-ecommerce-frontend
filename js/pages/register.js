@@ -1,4 +1,5 @@
 import { registerRequest } from "../api/auth-api.js";
+import { formatMessage } from "../utils/messages.js";
 
 const form = document.querySelector("#register-form");
 
@@ -12,13 +13,7 @@ const message = document.querySelector("#form-message");
 const submitButton = document.querySelector("#register-button");
 
 function showMessage(text, type = "error") {
-  message.textContent = text;
-  message.className =
-    type === "success"
-      ? "success-message"
-      : type === "error"
-        ? "error-message"
-        : "";
+  formatMessage(message, text, text ? type : "");
 }
 
 function validateForm() {

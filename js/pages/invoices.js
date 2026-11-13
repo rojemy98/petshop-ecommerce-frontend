@@ -1,6 +1,7 @@
 import { formatPrice, formatDate } from "../utils/formatters.js";
 import { getInvoices, getInvoiceByNumber } from "../api/invoices-api.js";
 import { validateSession } from "../services/auth-service.js";
+import { formatMessage } from "../utils/messages.js";
 
 const invoicesMessage = document.querySelector("#invoices-message");
 const invoicesList = document.querySelector("#invoices-list");
@@ -9,8 +10,7 @@ const invoiceDetailContent = document.querySelector("#invoice-detail-content");
 const backButton = document.querySelector("#back-to-invoices");
 
 function showMessage(message, type = "") {
-  invoicesMessage.textContent = message;
-  invoicesMessage.className = type;
+  formatMessage(invoicesMessage, message, type);
 }
 
 function createElement(tag, className, text) {

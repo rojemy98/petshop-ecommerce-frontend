@@ -1,7 +1,10 @@
+import { renderSessionHeader } from "../services/session-header.js";
 import { formatPrice } from "../utils/formatters.js";
 import { getProducts } from "../api/products-api.js";
 import { updateCartHeader } from "../services/cart-header.js";
 import { validateSession } from "../services/auth-service.js";
+
+renderSessionHeader();
 
 const productGrid = document.querySelector("#product-grid");
 const productsMessage = document.querySelector("#products-message");

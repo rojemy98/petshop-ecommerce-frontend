@@ -1,3 +1,4 @@
+import { renderSessionHeader } from "../services/session-header.js";
 import { formatMessage } from "../utils/messages.js";
 import { validateSession } from "../services/auth-service.js";
 import {
@@ -11,6 +12,8 @@ import {
   updateBillingAddress,
   deleteBillingAddress,
 } from "../api/billing-addresses-api.js";
+
+renderSessionHeader();
 
 const form = document.querySelector("#profile-form");
 

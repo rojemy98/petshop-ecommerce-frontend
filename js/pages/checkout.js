@@ -1,6 +1,7 @@
+import { renderSessionHeader } from "../services/session-header.js";
 import { getCart, clearCart } from "../services/cart-service.js";
 import { updateCartHeader } from "../services/cart-header.js";
-import { validateSession, getToken } from "../services/auth-service.js";
+import { validateSession, getUserId } from "../services/auth-service.js";
 import {
   getActiveCart,
   createCart,
@@ -15,6 +16,8 @@ import {
 import { checkoutCart } from "../api/checkout-api.js";
 import { formatPrice } from "../utils/formatters.js";
 import { formatMessage } from "../utils/messages.js";
+
+renderSessionHeader();
 
 const msg = document.querySelector("#checkout-message"),
   itemsBox = document.querySelector("#checkout-items"),
@@ -33,8 +36,8 @@ const err = (e) =>
   e.message ||
   "Ocurrió un error inesperado.";
 
-const remoteItems = (c) => c.products || c.cart_products || c.items || [];
-const remoteId = (i) => Number(i.product_id ?? i.product?.id ?? i.id);
+const remoteItems = (cart) => cart.products;
+const remoteId = (cartProduct) => Number(cartProduct.product_id);
 
 async function getOrCreate() {
   try {
@@ -125,9 +128,7 @@ function renderOrder() {
 }
 
 async function loadAddresses() {
-  const data = await getBillingAddresses();
-
-  const addresses = Array.isArray(data) ? data : data.addresses || [];
+  const addresses = await getBillingAddresses();
 
   select.replaceChildren();
 
@@ -245,7 +246,7 @@ confirm.addEventListener("click", async () => {
       );
 
     localStorage.setItem(
-      `mokka_pets_last_purchase:${getToken()}`,
+      `mokka_pets_last_purchase:user:${getUserId()}`,
       JSON.stringify({
         invoice_number: result.invoice_number,
         total: result.total,
