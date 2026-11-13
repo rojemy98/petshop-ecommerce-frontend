@@ -1,4 +1,5 @@
 import { loginRequest, getCurrentUser } from "../api/auth-api.js";
+import { clearCart } from "./cart-service.js";
 
 const TOKEN_KEY = "access_token";
 
@@ -22,7 +23,11 @@ export function getToken() {
 }
 
 export function logout() {
+  // Eliminar el carrito asociado a la sesión actual.
+  clearCart();
+
   localStorage.removeItem(TOKEN_KEY);
+
   window.location.href = "/login.html";
 }
 
@@ -55,9 +60,8 @@ export async function validateSession() {
       user: data.user,
     };
   } catch (error) {
-    const status = error.response?.status;
-
-    if (status === 401) {
+    if (error.response?.status === 401) {
+      clearCart();
       localStorage.removeItem(TOKEN_KEY);
 
       return {
@@ -66,8 +70,20 @@ export async function validateSession() {
       };
     }
 
-    // Un error de red o del servidor no demuestra que
+    // Un error de conexión no significa necesariamente que
     // la sesión haya expirado.
     throw error;
   }
 }
+
+// Añade una acción de cierre de sesión a la navegación de páginas autenticadas.
+function addLogoutControl() {
+  if (!getToken() || document.querySelector("#logout-button")) return;
+  const nav = document.querySelector(".site-header nav");
+  if (!nav) return;
+  const button = document.createElement("button");
+  button.id = "logout-button"; button.type = "button"; button.className = "button button-secondary"; button.textContent = "Cerrar sesión";
+  button.addEventListener("click", logout); nav.append(button);
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", addLogoutControl);
+else addLogoutControl();

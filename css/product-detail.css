@@ -144,7 +144,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  min-height: 44px;
+  min-height: 2.75rem;
   padding: 0.7rem 1rem;
   border-radius: 999px;
   text-decoration: none;
@@ -191,7 +191,7 @@
   color: white;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 43.75rem) {
   .site-header {
     justify-content: center;
   }

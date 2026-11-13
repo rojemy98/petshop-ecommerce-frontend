@@ -1,3 +1,4 @@
+import { formatPrice } from "../utils/formatters.js";
 import { getProductById } from "../api/products-api.js";
 import { addToCart, getCartItemQuantity } from "../services/cart-service.js";
 import { updateCartHeader } from "../services/cart-header.js";
@@ -6,24 +7,6 @@ const message = document.querySelector("#detail-message");
 const detail = document.querySelector("#product-detail");
 
 const productId = new URLSearchParams(window.location.search).get("id");
-
-function formatPrice(value) {
-  const price = Number(value);
-
-  if (
-    value === null ||
-    value === undefined ||
-    value === "" ||
-    !Number.isFinite(price)
-  ) {
-    return "Precio no disponible";
-  }
-
-  return new Intl.NumberFormat("es-CR", {
-    style: "currency",
-    currency: "CRC",
-  }).format(price);
-}
 
 let currentProduct = null;
 
@@ -35,7 +18,7 @@ async function loadProduct() {
 
   try {
     const response = await getProductById(productId);
-    const product = response.product ?? response.data ?? response;
+    const product = response;
 
     currentProduct = product;
 
@@ -60,28 +43,9 @@ async function loadProduct() {
         ? `Disponibles: ${availableStock}`
         : "No quedan unidades disponibles.";
 
-    // Mostrar la imagen del producto.
+    // El modelo Product del backend no incluye una propiedad de imagen.
     const imageContainer = document.querySelector("#detail-image");
-    const imageUrl =
-      product.image_url ??
-      product.image ??
-      product.image_path ??
-      product.imageUrl;
-
-    if (imageUrl) {
-      const image = document.createElement("img");
-      image.src = imageUrl;
-      image.alt = product.name ?? "Producto para mascotas";
-      image.loading = "lazy";
-
-      image.addEventListener("error", () => {
-        imageContainer.textContent = "🐾";
-      });
-
-      imageContainer.replaceChildren(image);
-    } else {
-      imageContainer.textContent = "🐾";
-    }
+    imageContainer.textContent = "🐾";
 
     // Actualizar el selector de cantidad.
     const quantity = document.querySelector("#quantity");

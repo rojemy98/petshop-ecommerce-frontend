@@ -1,3 +1,4 @@
+import { formatMessage } from "../utils/messages.js";
 import { validateSession } from "../services/auth-service.js";
 import {
   getUserProfile,
@@ -42,8 +43,7 @@ let billingAddresses = [];
 let editingAddressId = null;
 
 function showAddressMessage(text, type = "error") {
-  addressMessage.textContent = text;
-  addressMessage.style.color = type === "success" ? "#386641" : "#a12b22";
+  formatMessage(addressMessage, text, type);
 }
 
 function resetAddressForm() {
@@ -174,9 +174,7 @@ async function removeAddress(addressId) {
 }
 
 function showPasswordMessage(text, type = "error") {
-  passwordMessage.textContent = text;
-
-  passwordMessage.style.color = type === "success" ? "#386641" : "#a12b22";
+  formatMessage(passwordMessage, text, type);
 }
 
 function validatePasswordForm() {
@@ -217,9 +215,7 @@ function validatePasswordForm() {
 }
 
 function showMessage(text, type = "error") {
-  message.textContent = text;
-
-  message.style.color = type === "success" ? "#386641" : "#a12b22";
+  formatMessage(message, text, type);
 }
 
 function validateForm() {

@@ -11,8 +11,14 @@ const confirmPasswordInput = document.querySelector("#confirm-password");
 const message = document.querySelector("#form-message");
 const submitButton = document.querySelector("#register-button");
 
-function showMessage(text) {
+function showMessage(text, type = "error") {
   message.textContent = text;
+  message.className =
+    type === "success"
+      ? "success-message"
+      : type === "error"
+        ? "error-message"
+        : "";
 }
 
 function validateForm() {
@@ -23,6 +29,7 @@ function validateForm() {
   const confirmPassword = confirmPasswordInput.value;
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const nameRegex = /^[\p{L}]+(?:[\s\p{L}]*[\p{L}]+)?$/u;
 
   const inputs = [
     nameInput,
@@ -36,16 +43,20 @@ function validateForm() {
     input.setAttribute("aria-invalid", "false");
   });
 
-  if (!name || name.length > 100) {
+  if (!name || name.length > 100 || !nameRegex.test(name)) {
     nameInput.setAttribute("aria-invalid", "true");
-    showMessage("Ingresa un nombre válido.");
+    showMessage(
+      "Ingresa un nombre válido. Utiliza únicamente letras y espacios.",
+    );
     nameInput.focus();
     return false;
   }
 
-  if (!lastName || lastName.length > 100) {
+  if (!lastName || lastName.length > 100 || !nameRegex.test(lastName)) {
     lastNameInput.setAttribute("aria-invalid", "true");
-    showMessage("Ingresa tus apellidos.");
+    showMessage(
+      "Ingresa apellidos válidos. Utiliza únicamente letras y espacios.",
+    );
     lastNameInput.focus();
     return false;
   }
@@ -57,9 +68,9 @@ function validateForm() {
     return false;
   }
 
-  if (!password) {
+  if (password.length < 8 || password.length > 128) {
     passwordInput.setAttribute("aria-invalid", "true");
-    showMessage("Ingresa una contraseña.");
+    showMessage("La contraseña debe tener entre 8 y 128 caracteres.");
     passwordInput.focus();
     return false;
   }
@@ -95,7 +106,7 @@ form.addEventListener("submit", async (event) => {
   try {
     await registerRequest(userData);
 
-    showMessage("Cuenta creada correctamente. Redirigiendo...");
+    showMessage("Cuenta creada correctamente. Redirigiendo...", "success");
 
     form.reset();
 

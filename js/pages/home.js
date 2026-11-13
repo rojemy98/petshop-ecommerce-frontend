@@ -1,3 +1,4 @@
+import { formatPrice } from "../utils/formatters.js";
 import { getProducts } from "../api/products-api.js";
 import { updateCartHeader } from "../services/cart-header.js";
 import { validateSession } from "../services/auth-service.js";
@@ -103,40 +104,7 @@ async function renderAdminNavigation() {
 }
 
 function normalizeProducts(response) {
-  if (Array.isArray(response)) {
-    return response;
-  }
-
-  if (Array.isArray(response?.products)) {
-    return response.products;
-  }
-
-  if (Array.isArray(response?.data)) {
-    return response.data;
-  }
-
-  if (Array.isArray(response?.items)) {
-    return response.items;
-  }
-
-  return [];
-}
-
-function formatPrice(value) {
-  if (value === null || value === undefined || value === "") {
-    return "Precio no disponible";
-  }
-
-  const price = Number(value);
-
-  if (!Number.isFinite(price)) {
-    return "Precio no disponible";
-  }
-
-  return new Intl.NumberFormat("es-CR", {
-    style: "currency",
-    currency: "CRC",
-  }).format(price);
+  return Array.isArray(response) ? response : [];
 }
 
 function createProductCard(product) {
@@ -146,29 +114,8 @@ function createProductCard(product) {
   const imageContainer = document.createElement("div");
   imageContainer.className = "product-image";
 
-  const imageUrl =
-    product.image_url ??
-    product.image ??
-    product.image_path ??
-    product.imageUrl;
-
-  if (imageUrl) {
-    const image = document.createElement("img");
-    image.src = imageUrl;
-    image.alt = product.name ?? product.title ?? "Producto para mascotas";
-    image.loading = "lazy";
-
-    image.addEventListener("error", () => {
-      imageContainer.replaceChildren();
-      imageContainer.classList.add("product-image-placeholder");
-      imageContainer.textContent = "🐾";
-    });
-
-    imageContainer.append(image);
-  } else {
-    imageContainer.classList.add("product-image-placeholder");
-    imageContainer.textContent = "🐾";
-  }
+  imageContainer.classList.add("product-image-placeholder");
+  imageContainer.textContent = "🐾";
 
   const info = document.createElement("div");
   info.className = "product-info";
@@ -227,7 +174,6 @@ async function loadProducts() {
   try {
     const response = await getProducts();
 
-    console.log("Respuesta del catálogo:", response);
 
     // Guardar todos los productos para aplicar los filtros.
     allProducts = normalizeProducts(response);
